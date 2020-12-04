@@ -1,3 +1,4 @@
+import random
 from datetime import date
 
 from workalendar.america import Brazil
@@ -8,19 +9,40 @@ MESES_30 = [4, 6, 9, 11]
 MESES_31 = [1, 3, 5, 7, 8, 10, 12]
 
 
-def get_dias(data):
+def get_dias(data: date) -> int:
+    """
+    Retorna a quantidade de dias no mês conforme a data.
+    Posteriormente será necessário considerar anos bissextos.
+    """
     mes = data.month
     if mes in MESES_30:
-        dias = 30
+        return 30
     elif mes in MESES_31:
-        dias = 31
+        return 31
     else:
-        dias = 28
-    return dias
+        return 28
 
 
-def gerar_duplas():
+def gerar_duplas() -> None:
+    """
+    Função usada para salvar as duplas no banco de dados.
+    As duplas são criadas aleatoriamente com os perfis ativos.
+    """
     perfis = Profile.objects.filter(user__is_active=True)
+    duos = {}
+
+    for _ in range(len(perfis)):
+        pks = perfis.values_list('user_id', flat=True)
+        if pks:
+            pk_1 = random.choices(pks)
+            del pks[pks.index(pk_1)]
+            perfis = perfis.exclude(user_id=pk_1)
+            if pks:
+                pk_2 = random.choices(pks)
+                del pks[pks.index(pk_2)]
+                perfis = perfis.exclude(user_id=pk_2)
+
+
     today = date.today()
     dia_hoje = today.day
     ultimo_dia = get_dias(data=today)
@@ -28,7 +50,8 @@ def gerar_duplas():
         data_ = date(today.year, today.month, dia)
         br = Brazil()
         if br.is_working_day(data_):
-            """ Gerar as duplas aqui """
+
+            integrante_1 = perfis.get(user_id=pk_1)
             Duplas.objects.create(
                 integrante_1=dupla['integrante_1'],
                 integrante_2=dupla['integrante_2'],
