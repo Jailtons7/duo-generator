@@ -29,4 +29,4 @@ class Duplas(models.Model):
     data = models.DateField()
 
     def __str__(self):
-        return f'{self.integrante_1.name} e {self.integrante_2.name}'
+        return f'{self.integrante_1.user.get_full_name()} e {self.integrante_2.user.get_full_name()}'
