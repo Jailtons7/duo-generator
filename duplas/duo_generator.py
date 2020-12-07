@@ -28,8 +28,11 @@ def gerar_duplas() -> None:
     Função usada para salvar as duplas no banco de dados.
     As duplas são criadas aleatoriamente com os perfis ativos.
     """
-    perfis = Profile.objects.filter(user__is_active=True)
-    duos = {}
+    perfis_m = Profile.objects.filter(user__is_active=True, sexo='M')
+    random_perfis_m = set(random.choices(perfis_m.values_list('user_id', flat=True), k=perfis_m.count()))
+    perfis_f = Profile.objects.filter(user__is_active=True, sexo='F')
+    random_perfis_f = set(random.choices(perfis_f.values_list('user_id', flat=True), k=perfis_f.count()))
+    perfis_aleatorios = random_perfis_m.update(random_perfis_f)
 
     for _ in range(len(perfis)):
         pks = perfis.values_list('user_id', flat=True)
