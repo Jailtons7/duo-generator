@@ -1,62 +1,46 @@
 import random
+import logging
 from datetime import date
 
 from workalendar.america import Brazil
 
 from duplas.models import Profile, Duplas
 
-MESES_30 = [4, 6, 9, 11]
-MESES_31 = [1, 3, 5, 7, 8, 10, 12]
+MONTHS_30 = [4, 6, 9, 11]
+MONTHS_31 = [1, 3, 5, 7, 8, 10, 12]
 
 
-def get_dias(data: date) -> int:
+def get_days(month: int) -> int:
     """
     Retorna a quantidade de dias no mês conforme a data.
     Posteriormente será necessário considerar anos bissextos.
     """
-    mes = data.month
-    if mes in MESES_30:
+    if month in MONTHS_30:
         return 30
-    elif mes in MESES_31:
+    elif month in MONTHS_31:
         return 31
-    else:
+    elif month == 2:
         return 28
+    else:
+        logging.error(f'{month} is an invalid month')
+        return 0
 
 
-def gerar_duplas() -> None:
+def generate_duos() -> tuple:
     """
-    Função usada para salvar as duplas no banco de dados.
-    As duplas são criadas aleatoriamente com os perfis ativos.
+    Função usada para criar as duplas do mês.
+    As duplas são formadas aleatoriamente com os perfis ativos (preferencialmente 1 homem + 1 mulher).
     """
-    perfis_m = Profile.objects.filter(user__is_active=True, sexo='M')
-    random_perfis_m = set(random.choices(perfis_m.values_list('user_id', flat=True), k=perfis_m.count()))
-    perfis_f = Profile.objects.filter(user__is_active=True, sexo='F')
-    random_perfis_f = set(random.choices(perfis_f.values_list('user_id', flat=True), k=perfis_f.count()))
-    perfis_aleatorios = random_perfis_m.update(random_perfis_f)
+    m_profiles = Profile.objects.filter(user__is_active=True, sexo='M')
+    f_profiles = Profile.objects.filter(user__is_active=True, sexo='F')
 
-    for _ in range(len(perfis)):
-        pks = perfis.values_list('user_id', flat=True)
-        if pks:
-            pk_1 = random.choices(pks)
-            del pks[pks.index(pk_1)]
-            perfis = perfis.exclude(user_id=pk_1)
-            if pks:
-                pk_2 = random.choices(pks)
-                del pks[pks.index(pk_2)]
-                perfis = perfis.exclude(user_id=pk_2)
+    m_random = random.choices(m_profiles.values_list('user_id', flat=True), k=m_profiles.count())
+    f_random = random.choices(f_profiles.values_list('user_id', flat=True), k=f_profiles.count())
 
+    perfis = m_random + f_random
 
-    today = date.today()
-    dia_hoje = today.day
-    ultimo_dia = get_dias(data=today)
-    for dia in range(dia_hoje, ultimo_dia + 1):
-        data_ = date(today.year, today.month, dia)
-        br = Brazil()
-        if br.is_working_day(data_):
+    duplas = ()
+    for index in range((len(perfis) + 1) // 2):
+        duplas += ((perfis[index], perfis[-index-1]),)
 
-            integrante_1 = perfis.get(user_id=pk_1)
-            Duplas.objects.create(
-                integrante_1=dupla['integrante_1'],
-                integrante_2=dupla['integrante_2'],
-                data=data_
-            )
+    return duplas
