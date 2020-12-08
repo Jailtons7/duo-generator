@@ -10,6 +10,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profiles')
     sexo = models.CharField(max_length=22, choices=SEXOS)
 
+    def __str__(self):
+        return f'{self.user}'
+
 
 class Duplas(models.Model):
     integrante_1 = models.ForeignKey(
