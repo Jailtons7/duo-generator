@@ -31,8 +31,8 @@ def generate_duos() -> tuple:
     Função usada para criar as duplas do mês.
     As duplas são formadas aleatoriamente com os perfis ativos (preferencialmente 1 homem + 1 mulher).
     """
-    m_profiles = Profile.objects.filter(user__is_active=True, sexo='M')
-    f_profiles = Profile.objects.filter(user__is_active=True, sexo='F')
+    m_profiles = Profile.objects.filter(user__is_active=True, user__is_superuser=False, sexo='M')
+    f_profiles = Profile.objects.filter(user__is_active=True, user__is_superuser=False, sexo='F')
 
     m_random = random.choices(m_profiles.values_list('user_id', flat=True), k=m_profiles.count())
     f_random = random.choices(f_profiles.values_list('user_id', flat=True), k=f_profiles.count())
