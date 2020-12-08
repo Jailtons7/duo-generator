@@ -8,11 +8,10 @@ from workalendar.america import Brazil
 
 
 class DuplasListView(ListView):
-    model = Duplas
+    context_object_name = 'duplas_list'
     template_name = 'duplas/duplas.html'
 
-    def get(self, request, *args, **kwargs):
-        novas_duplas = request.GET.get('novas_duplas')
+    def create_duos(self, novas_duplas=None):
         if novas_duplas:
             today = date.today()
             duplas = generate_duos()
@@ -21,7 +20,7 @@ class DuplasListView(ListView):
             index = 0
             for dia in range(today.day, dias_mes + 1):
                 if br.is_working_day(date(today.year, today.month, dia)):
-                    # Salva as duplas com o dia da limpeza no banco de dados
+                    # Salve as duplas com o dia da limpeza no banco de dados
                     try:
                         Duplas.objects.create(
                             integrante_1=Profile.objects.get(pk=duplas[index][0]),
@@ -30,6 +29,20 @@ class DuplasListView(ListView):
                         )
                         index += 1
                     except IndexError:
-                        # Se der erro de index volta para o início da tupla com as duplas
-                        index = 0
-        return render(request, self.template_name)
+                        # Se der erro de index volte para o início da tupla com as duplas e redefina o index
+                        Duplas.objects.create(
+                            integrante_1=Profile.objects.get(pk=duplas[0][0]),
+                            integrante_2=Profile.objects.get(pk=duplas[0][1]),
+                            data=date(today.year, today.month, dia)
+                        )
+                        index = 1
+
+    def get_queryset(self):
+        return Duplas.objects.all().order_by('id')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        print(self.request.user)
+        context = super().get_context_data(*kwargs, **kwargs)
+        self.request.GET.get('novas_duplas') and self.create_duos(self.request.GET.get('novas_duplas'))
+        context['title'] = 'Duplas do mês'
+        return context
