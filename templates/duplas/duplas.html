@@ -46,10 +46,14 @@
             events: [
                 {% for dupla in duplas_list %}
                     {
-                        'title': '{{ dupla }}',
+                        'title': '{{ dupla.integrante_1 }}',
                         'start': '{{ dupla.data.year }}-{{ dupla.data.month }}-{{ dupla.data.day }}',
                         'end': '{{ dupla.data.year }}-{{ dupla.data.month }}-{{ dupla.data.day }}',
-                        // 'classNames': ['grande'],
+                    },
+                    {
+                        'title': '{{ dupla.integrante_2 }}',
+                        'start': '{{ dupla.data.year }}-{{ dupla.data.month }}-{{ dupla.data.day }}',
+                        'end': '{{ dupla.data.year }}-{{ dupla.data.month }}-{{ dupla.data.day }}',
                     },
                 {% endfor %}
             ],

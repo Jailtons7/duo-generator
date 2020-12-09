@@ -23,16 +23,16 @@ class DuplasListView(ListView):
                     # Salve as duplas com o dia da limpeza no banco de dados
                     try:
                         Duplas.objects.create(
-                            integrante_1=Profile.objects.get(pk=duplas[index][0]),
-                            integrante_2=Profile.objects.get(pk=duplas[index][1]),
+                            integrante_1=Profile.objects.get(user_id=duplas[index][0]),
+                            integrante_2=Profile.objects.get(user_id=duplas[index][1]),
                             data=date(today.year, today.month, dia)
                         )
                         index += 1
                     except IndexError:
                         # Se der erro de index volte para o início da tupla com as duplas e redefina o index
                         Duplas.objects.create(
-                            integrante_1=Profile.objects.get(pk=duplas[0][0]),
-                            integrante_2=Profile.objects.get(pk=duplas[0][1]),
+                            integrante_1=Profile.objects.get(user_id=duplas[0][0]),
+                            integrante_2=Profile.objects.get(user_id=duplas[0][1]),
                             data=date(today.year, today.month, dia)
                         )
                         index = 1
@@ -41,7 +41,6 @@ class DuplasListView(ListView):
         return Duplas.objects.all().order_by('id')
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        print(self.request.user)
         context = super().get_context_data(*kwargs, **kwargs)
         self.request.GET.get('novas_duplas') and self.create_duos(self.request.GET.get('novas_duplas'))
         context['title'] = 'Duplas do mês'
