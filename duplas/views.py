@@ -11,8 +11,9 @@ class DuplasListView(ListView):
     context_object_name = 'duplas_list'
     template_name = 'duplas/duplas.html'
 
-    def create_duos(self, novas_duplas=None):
-        if novas_duplas:
+    def create_duos(self) -> None:
+        """ Método usado para alocar cada dupla em um dia útil do mês """
+        if self.request.GET.get('novas_duplas'):
             today = date.today()
             duplas = generate_duos()
             dias_mes = get_days(today.month)
@@ -42,6 +43,6 @@ class DuplasListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(*kwargs, **kwargs)
-        self.request.GET.get('novas_duplas') and self.create_duos(self.request.GET.get('novas_duplas'))
+        self.request.GET.get('novas_duplas') and self.create_duos()
         context['title'] = 'Duplas do mês'
         return context
