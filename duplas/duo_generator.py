@@ -34,10 +34,10 @@ def generate_duos() -> tuple:
     m_profiles = Profile.objects.filter(user__is_active=True, user__is_superuser=False, sexo='M')
     f_profiles = Profile.objects.filter(user__is_active=True, user__is_superuser=False, sexo='F')
 
-    m_random = random.choices(m_profiles.values_list('user_id', flat=True), k=m_profiles.count())
-    f_random = random.choices(f_profiles.values_list('user_id', flat=True), k=f_profiles.count())
+    random.shuffle(list(m_profiles.values_list('user_id', flat=True)))  # Embaralhando m_profiles
+    random.shuffle(list(f_profiles.values_list('user_id', flat=True)))  # Embaralhando f_profiles
 
-    perfis = m_random + f_random
+    perfis = list(m_profiles) + list(f_profiles)
 
     duplas = ()
     for index in range((len(perfis) + 1) // 2):
