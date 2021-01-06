@@ -1,10 +1,17 @@
+# imports from built-in module
 from datetime import date
 
+# imports from django
 from django.views.generic import ListView
-from django.shortcuts import render
+from django.db.utils import IntegrityError
+from django.contrib import messages
+
+# imports from third party applications
+from workalendar.america import Brazil
+
+# imports from this application
 from duplas.models import Duplas, Profile
 from .duo_generator import generate_duos, get_days
-from workalendar.america import Brazil
 
 
 class DuplasListView(ListView):
@@ -37,6 +44,13 @@ class DuplasListView(ListView):
                             data=date(today.year, today.month, dia)
                         )
                         index = 1
+                    except IntegrityError:
+                        messages.add_message(
+                            self.request,
+                            messages.INFO,
+                            "As duplas deste mês já foram criadas"
+                        )
+                        break
 
     def get_queryset(self):
         return Duplas.objects.all().order_by('id')
