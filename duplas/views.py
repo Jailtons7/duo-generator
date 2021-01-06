@@ -24,16 +24,16 @@ class DuplasListView(ListView):
                     # Salve as duplas com o dia da limpeza no banco de dados
                     try:
                         Duplas.objects.create(
-                            integrante_1=Profile.objects.get(user_id=duplas[index][0].pk),
-                            integrante_2=Profile.objects.get(user_id=duplas[index][1].pk),
+                            integrante_1=Profile.objects.get(id=duplas[index][0]),
+                            integrante_2=Profile.objects.get(id=duplas[index][1]),
                             data=date(today.year, today.month, dia)
                         )
                         index += 1
                     except IndexError:
                         # Se der erro de index volte para o início da tupla com as duplas e redefina o index
                         Duplas.objects.create(
-                            integrante_1=Profile.objects.get(user_id=duplas[0][0]),
-                            integrante_2=Profile.objects.get(user_id=duplas[0][1]),
+                            integrante_1=Profile.objects.get(id=duplas[0][0]),
+                            integrante_2=Profile.objects.get(id=duplas[0][1]),
                             data=date(today.year, today.month, dia)
                         )
                         index = 1
