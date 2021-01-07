@@ -10,7 +10,7 @@ from django.contrib import messages
 from workalendar.america import Brazil
 
 # imports from this application
-from duplas.models import Duplas, Profile
+from duplas.models import Duplas, Integrante
 from .duo_generator import generate_duos, get_days
 
 
@@ -31,17 +31,17 @@ class DuplasListView(ListView):
                     # Salve as duplas com o dia da limpeza no banco de dados
                     try:
                         Duplas.objects.create(
-                            integrante_1=Profile.objects.get(id=duplas[index][0]),
-                            integrante_2=Profile.objects.get(id=duplas[index][1]),
-                            data=date(today.year, today.month, dia)
+                            integrante_1=Integrante.objects.get(id=duplas[index][0]),
+                            integrante_2=Integrante.objects.get(id=duplas[index][1]),
+                            date=date(today.year, today.month, dia)
                         )
                         index += 1
                     except IndexError:
                         # Se der erro de index volte para o início da tupla com as duplas e redefina o index
                         Duplas.objects.create(
-                            integrante_1=Profile.objects.get(id=duplas[0][0]),
-                            integrante_2=Profile.objects.get(id=duplas[0][1]),
-                            data=date(today.year, today.month, dia)
+                            integrante_1=Integrante.objects.get(id=duplas[0][0]),
+                            integrante_2=Integrante.objects.get(id=duplas[0][1]),
+                            date=date(today.year, today.month, dia)
                         )
                         index = 1
                     except IntegrityError:
