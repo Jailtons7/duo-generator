@@ -54,12 +54,12 @@
             events: [
                 {% for dupla in duplas_list %}
                     {
-                        "title": "{{ dupla.integrante_1.user.get_full_name }}",
-                        "start": "{{ dupla.data|date:'Y-m-d' }}",
+                        "title": "{{ dupla.integrante_1.get_full_name }}",
+                        "start": "{{ dupla.date|date:'Y-m-d' }}",
                     },
                     {
-                        "title": "{{ dupla.integrante_2.user.get_full_name }}",
-                        "start": "{{ dupla.data|date:'Y-m-d' }}",
+                        "title": "{{ dupla.integrante_2.get_full_name }}",
+                        "start": "{{ dupla.date|date:'Y-m-d' }}",
                         "align": "center",
                     },
                 {% endfor %}
