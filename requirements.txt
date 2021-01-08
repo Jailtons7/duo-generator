@@ -1,0 +1,16 @@
+asgiref==3.3.1
+certifi==2020.11.8
+Django==3.1.4
+jplephem==2.15
+lunardate==0.2.0
+numpy==1.19.4
+pyCalverter==1.6.1
+pyluach==1.2.1
+python-dateutil==2.8.1
+pytz==2020.4
+sgp4==2.13
+six==1.15.0
+skyfield==1.33
+skyfield-data==1.1.0
+sqlparse==0.4.1
+workalendar==14.0.0
