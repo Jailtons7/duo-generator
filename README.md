@@ -14,7 +14,8 @@ formadas por um homem e uma mulher;
 Antes de tudo, para ter a certeza de que os comandos abaixo 
 e a aplicação irão rodar corretamente, você vai precisar do 
 <strong>Python 3.8</strong> instalado na sua máquina e registrado
-na variável PATH do seu SO.
+na variável PATH do seu SO. Também será preciso ter o node para 
+intalar as dependências javascript e css. 
 
 <ol>
 <li>Crie e ative um ambiente virtual</li>
@@ -23,9 +24,13 @@ na variável PATH do seu SO.
 
 `source venv_name/bin/activate`
 
-<li>Instale as dependências</li>
+<li>Instale as dependências Python</li>
 
 `pip install -r requirements.txt`
+
+<li>Instale as dependências do front-end</li>
+
+`npm install`
 <li>Crie e rode as migrations</li>
 
 `python manage.py makemigrations`
