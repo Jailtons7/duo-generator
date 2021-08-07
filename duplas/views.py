@@ -10,7 +10,7 @@ from django.contrib import messages
 from workalendar.america import Brazil
 
 # imports from this application
-from duplas.models import Duplas, Integrante
+from duplas.models import Duos, Members
 from .duo_generator import generate_duos, get_days
 
 
@@ -30,17 +30,17 @@ class DuplasListView(ListView):
                 if br.is_working_day(date(today.year, today.month, dia)):
                     # Salve as duplas com o dia da limpeza no banco de dados
                     try:
-                        Duplas.objects.create(
-                            integrante_1=Integrante.objects.get(id=duplas[index][0]),
-                            integrante_2=Integrante.objects.get(id=duplas[index][1]),
+                        Duos.objects.create(
+                            integrante_1=Members.objects.get(id=duplas[index][0]),
+                            integrante_2=Members.objects.get(id=duplas[index][1]),
                             date=date(today.year, today.month, dia)
                         )
                         index += 1
                     except IndexError:
                         # Se der erro de index volte para o início da tupla com as duplas e redefina o index
-                        Duplas.objects.create(
-                            integrante_1=Integrante.objects.get(id=duplas[0][0]),
-                            integrante_2=Integrante.objects.get(id=duplas[0][1]),
+                        Duos.objects.create(
+                            integrante_1=Members.objects.get(id=duplas[0][0]),
+                            integrante_2=Members.objects.get(id=duplas[0][1]),
                             date=date(today.year, today.month, dia)
                         )
                         index = 1
@@ -53,7 +53,7 @@ class DuplasListView(ListView):
                         break
 
     def get_queryset(self):
-        return Duplas.objects.all().order_by('id')
+        return Duos.objects.all().order_by('id')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(*kwargs, **kwargs)

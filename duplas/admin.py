@@ -1,8 +1,8 @@
 from django.contrib import admin
-from duplas.models import Integrante
+from duplas.models import Members
 
 
-@admin.register(Integrante)
+@admin.register(Members)
 class IntegranteAdmin(admin.ModelAdmin):
     fields = ('name', 'surname', 'gender', 'active')
     list_display = fields

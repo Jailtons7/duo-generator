@@ -2,11 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Integrante(models.Model):
+class Members(models.Model):
     SEXOS = (
-        ('', 'Selecione'),
-        ('M', 'Masculino'),
-        ('F', 'Feminino'),
+        ('M', 'Male'),
+        ('F', 'Female'),
     )
     name = models.CharField(max_length=127, verbose_name="Nome")
     surname = models.CharField(max_length=127, verbose_name="Sobrenome", null=True, blank=True)
@@ -22,22 +21,22 @@ class Integrante(models.Model):
         return self.__str__()
 
 
-class Duplas(models.Model):
-    integrante_1 = models.ForeignKey(
-        Integrante,
+class Duos(models.Model):
+    member_1 = models.ForeignKey(
+        Members,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="primeiro_integrante"
+        related_name="first_member"
     )
-    integrante_2 = models.ForeignKey(
-        Integrante,
+    member_2 = models.ForeignKey(
+        Members,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="segundo_integrante"
+        related_name="second_member"
     )
     date = models.DateField(unique=True, verbose_name="Data")
 
     def __str__(self):
-        return f'{self.integrante_1.name} e {self.integrante_2.name}'
+        return f'{self.member_1.name} e {self.member_2.name}'

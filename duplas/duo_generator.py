@@ -4,7 +4,7 @@ from datetime import date
 
 from workalendar.america import Brazil
 
-from duplas.models import Integrante, Duplas
+from duplas.models import Members, Duos
 
 MONTHS_30 = [4, 6, 9, 11]
 MONTHS_31 = [1, 3, 5, 7, 8, 10, 12]
@@ -31,9 +31,9 @@ def generate_duos() -> tuple:
     Função usada para criar as duplas do mês.
     As duplas são formadas aleatoriamente com os perfis ativos (preferencialmente 1 homem + 1 mulher).
     """
-    integrantes_m = list(Integrante.objects.filter(
+    integrantes_m = list(Members.objects.filter(
         active=True, gender='M').values_list('id', flat=True))
-    integrantes_f = list(Integrante.objects.filter(
+    integrantes_f = list(Members.objects.filter(
         active=True, gender='F').values_list('id', flat=True))
 
     random.shuffle(integrantes_m)  # Embaralhando integrantes_m
